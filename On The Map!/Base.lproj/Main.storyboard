@@ -88,8 +88,41 @@
                     <view key="view" contentMode="scaleToFill" restorationIdentifier="LoginViewController" id="f0Z-4O-JNS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jgg-FG-wF5">
+                                <rect key="frame" x="213" y="186" width="175" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2ne-zf-J0C" id="z9x-jY-gAp"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="plN-6n-sFd">
+                                <rect key="frame" x="213" y="246" width="175" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2ne-zf-J0C" id="fRS-TA-Ejz"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBk-dm-gsG">
+                                <rect key="frame" x="235" y="295" width="131" height="30"/>
+                                <state key="normal" title="Log in with Udacity"/>
+                                <connections>
+                                    <action selector="loginButtonUdacity:" destination="2ne-zf-J0C" eventType="touchUpInside" id="PLb-ee-MeV"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQk-kI-cBF">
+                                <rect key="frame" x="228" y="508" width="145" height="30"/>
+                                <state key="normal" title="Log in with Facebook"/>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="password" destination="plN-6n-sFd" id="zJ0-dG-kAx"/>
+                        <outlet property="username" destination="Jgg-FG-wF5" id="R1y-Y2-PWX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HH1-Vk-T8Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
