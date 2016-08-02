@@ -61,17 +61,19 @@ extension UdacityClient {
         }
     }
     
-    private func getUserData(userID: String, completionHandlerForUserID: (sessionID: String?, errorString: String?) -> Void) {
+    private func getUserData(userID: String?, completionHandlerForUserID: (userData: [String:AnyObject]?, errorString: String?) -> Void) {
         
         var mutableMethod: String = Methods.UserData
-        mutableMethod = substituteKeyInMethod(mutableMethod, key: UdacityClient.URLKeys.UserID, value: userID)!
+        mutableMethod = substituteKeyInMethod(mutableMethod, key: UdacityClient.URLKeys.UserID, value: userID!)!
         
         taskForGETMethod(mutableMethod) { (result, error) in
             if let error = error {
-                completionHandlerForUserID(sessionID: nil, errorString: String(error))
+                completionHandlerForUserID(userData: nil, errorString: String(error))
             } else {
-                if let result = result[UdacityClient.JSONResponseKeys.Account] {
-                    
+                if let result = result[UdacityClient.JSONResponseKeys.User] {
+                    completionHandlerForUserID(userData: result as? [String:AnyObject], errorString: nil)
+                } else {
+                    completionHandlerForUserID(userData: nil, errorString: "Could not find \(UdacityClient.JSONResponseKeys.User) in \(result)")
                 }
             }
         }
