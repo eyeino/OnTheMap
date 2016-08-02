@@ -80,7 +80,7 @@
         <!--Login View Controller-->
         <scene sceneID="v1P-Ea-Wjn">
             <objects>
-                <viewController restorationIdentifier="LoginViewController" storyboardIdentifier="LoginViewController" id="2ne-zf-J0C" customClass="LoginViewController" customModule="On_The_Map_" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="LoginViewController" storyboardIdentifier="LoginViewController" id="2ne-zf-J0C" customClass="LoginViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9My-Mu-qkB"/>
                         <viewControllerLayoutGuide type="bottom" id="N41-SZ-IzM"/>
@@ -130,6 +130,7 @@
                     <connections>
                         <outlet property="password" destination="plN-6n-sFd" id="zJ0-dG-kAx"/>
                         <outlet property="username" destination="Jgg-FG-wF5" id="R1y-Y2-PWX"/>
+                        <segue destination="49e-Tb-3d3" kind="show" identifier="SegueToTabBar" id="KSQ-ZW-B5E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HH1-Vk-T8Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -139,7 +140,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="49e-Tb-3d3" customClass="TabBarController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>

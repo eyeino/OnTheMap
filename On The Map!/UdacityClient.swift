@@ -20,7 +20,6 @@ class UdacityClient: NSObject {
     //none
     
     //authentication state
-    //var requestToken: String? = nil
     var sessionID: String? = nil
     //var userID: String? = nil
     
@@ -32,7 +31,7 @@ class UdacityClient: NSObject {
     
     // MARK: GET
     
-    func taskForGETMethod(method: String, parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForGETMethod(method: String, parameters: [String:AnyObject] = [String:AnyObject](), completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
         /* 2/3. Build the URL, Configure the request */
         let request = NSMutableURLRequest(URL: UdacityURLFromParameters(parameters, withPathExtension: method))
@@ -64,8 +63,11 @@ class UdacityClient: NSObject {
                 return
             }
             
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            
             /* 5/6. Parse the data and use the data (happens in completion handler) */
-            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForGET)
+            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForGET)
         }
         
         /* 7. Start the request */
@@ -104,7 +106,15 @@ class UdacityClient: NSObject {
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
+                
+                let statusCode = (response as? NSHTTPURLResponse)?.statusCode
+                
+                if statusCode == 403 {
+                    sendError("Incorrect username/password.")
+                } else {
+                    sendError("Your request returned a status code other than 2xx!")
+                }
+                
                 return
             }
             
@@ -127,6 +137,14 @@ class UdacityClient: NSObject {
         return task
     }
 
+    // substitute the key for the value that is contained within the method name
+    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
+        if method.rangeOfString("{\(key)}") != nil {
+            return method.stringByReplacingOccurrencesOfString("{\(key)}", withString: value)
+        } else {
+            return nil
+        }
+    }
     
     // given raw JSON, return a usable Foundation object
     private func convertDataWithCompletionHandler(data: NSData, completionHandlerForConvertData: (result: AnyObject!, error: NSError?) -> Void) {

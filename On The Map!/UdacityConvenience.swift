@@ -15,7 +15,8 @@ extension UdacityClient {
 
         createSessionID() { (success, sessionID, errorString) in
             if success {
-                print(sessionID)
+                self.sessionID = sessionID
+                completionHandlerForAuth(success: success, errorString: errorString)
             } else {
                 completionHandlerForAuth(success: success, errorString: errorString)
             }
@@ -57,6 +58,22 @@ extension UdacityClient {
             
             completionHandlerForSession(success: true, sessionID: sessionID, errorString: nil)
             
+        }
+    }
+    
+    private func getUserData(userID: String, completionHandlerForUserID: (sessionID: String?, errorString: String?) -> Void) {
+        
+        var mutableMethod: String = Methods.UserData
+        mutableMethod = substituteKeyInMethod(mutableMethod, key: UdacityClient.URLKeys.UserID, value: userID)!
+        
+        taskForGETMethod(mutableMethod) { (result, error) in
+            if let error = error {
+                completionHandlerForUserID(sessionID: nil, errorString: String(error))
+            } else {
+                if let result = result[UdacityClient.JSONResponseKeys.Account] {
+                    
+                }
+            }
         }
     }
 }

@@ -18,10 +18,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
         UdacityClient.sharedInstance().authenticateWithViewController(self) { (success, errorString) in
-            if success {
-                print(success)
-            } else {
-                print(errorString)
+            performUIUpdatesOnMain {
+                if success {
+                    self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
+                } else {
+                    print(errorString)
+                }
             }
         }
     }

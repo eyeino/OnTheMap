@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C940C581D503FDD003A8547 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C940C571D503FDD003A8547 /* MapKit.framework */; };
 		3C9CED161D4F9EB700BF2CE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9CED151D4F9EB700BF2CE2 /* AppDelegate.swift */; };
 		3C9CED181D4F9EB700BF2CE2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9CED171D4F9EB700BF2CE2 /* MapViewController.swift */; };
 		3C9CED1A1D4F9EB700BF2CE2 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9CED191D4F9EB700BF2CE2 /* TableViewController.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C940C571D503FDD003A8547 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3C9CED121D4F9EB700BF2CE2 /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C9CED151D4F9EB700BF2CE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C9CED171D4F9EB700BF2CE2 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C940C581D503FDD003A8547 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +99,7 @@
 		3C9CED091D4F9EB700BF2CE2 = {
 			isa = PBXGroup;
 			children = (
+				3C940C571D503FDD003A8547 /* MapKit.framework */,
 				3C9CED141D4F9EB700BF2CE2 /* On The Map! */,
 				3C9CED2B1D4F9EB700BF2CE2 /* On The Map!Tests */,
 				3C9CED361D4F9EB700BF2CE2 /* On The Map!UITests */,
@@ -118,9 +122,9 @@
 			children = (
 				3C9CED151D4F9EB700BF2CE2 /* AppDelegate.swift */,
 				3C9CED491D4FA95600BF2CE2 /* GCDBlackBox.swift */,
-				3C9CED531D4FAA5200BF2CE2 /* Controller */,
-				3C9CED521D4FAA4B00BF2CE2 /* View */,
 				3C9CED511D4FAA4300BF2CE2 /* Model */,
+				3C9CED521D4FAA4B00BF2CE2 /* View */,
+				3C9CED531D4FAA5200BF2CE2 /* Controller */,
 				3C9CED571D4FAAB100BF2CE2 /* Assets */,
 				3C9CED581D4FAADE00BF2CE2 /* Supporting Files */,
 			);
@@ -163,9 +167,9 @@
 		3C9CED531D4FAA5200BF2CE2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				3C9CED471D4FA86700BF2CE2 /* LoginViewController.swift */,
 				3C9CED171D4F9EB700BF2CE2 /* MapViewController.swift */,
 				3C9CED191D4F9EB700BF2CE2 /* TableViewController.swift */,
-				3C9CED471D4FA86700BF2CE2 /* LoginViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
