@@ -81,7 +81,7 @@ class UdacityClient: NSObject {
         /* 1. Set the parameters */
         //Udacity does not require parameters for any functions
         /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(URL: UdacityURLFromParameters(parameters, withPathExtension: method))
+        let request = NSMutableURLRequest(URL: UdacityURLFromParameters(parameters, withPathExtension: Methods.Session))
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -114,8 +114,11 @@ class UdacityClient: NSObject {
                 return
             }
             
+            //Remove first 5 characters; they are used internally by Udacity for security reasons
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+            
             /* 5/6. Parse the data and use the data (happens in completion handler) */
-            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
+            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPOST)
         }
         
         /* 7. Start the request */

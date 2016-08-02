@@ -17,7 +17,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
-        UdacityClient.sharedInstance().authenticateWithViewController(self, username: username.text!, password: password.text!) { (success, errorString, username, password) in
+        UdacityClient.sharedInstance().authenticateWithViewController(self) { (success, errorString) in
             if success {
                 print(success)
             } else {

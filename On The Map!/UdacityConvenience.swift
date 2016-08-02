@@ -11,34 +11,51 @@ import UIKit
 
 extension UdacityClient {
     
-    func authenticateWithViewController(hostViewController: UIViewController, username: String, password: String, completionHandlerForAuth: (success: Bool, errorString: String?, username: String, password: String) -> Void) {
-        
-        print("authenticating")
-        createSessionID(username, password: password) { (success, sessionID, errorString) in
+    func authenticateWithViewController(hostViewController: UIViewController, completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
+
+        createSessionID() { (success, sessionID, errorString) in
             if success {
                 print(sessionID)
             } else {
-                completionHandlerForAuth(success: success, errorString: errorString, username: username, password: password)
+                completionHandlerForAuth(success: success, errorString: errorString)
             }
         }
     
     }
     
-    private func createSessionID(username: String, password: String, completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
+    private func createSessionID(completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
         
         //let jsonBody = "{\"\(UdacityClient.JSONBodyKeys.Udacity)\": {\"\(UdacityClient.JSONBodyKeys.Username)\": \"\(username)\", \"\(UdacityClient.JSONBodyKeys.Password)\": \"\(password)\"}}"
 
-        let jsonBody = "{\"udacity\": {\"username\": \"***REMOVED***\", \"password\": \"***REMOVED***\"}}"
+        let jsonBody: String! = "{\"udacity\": {\"username\": \"***REMOVED***\", \"password\": \"***REMOVED***\"}}"
             
         taskForPOSTMethod(Methods.Session, jsonBody: jsonBody) { (results, error) in
             
-            if error != nil { // Handle error…
+            func sendError(error: String) {
+                completionHandlerForSession(success: false, sessionID: nil, errorString: error)
+            }
+            
+            guard (error == nil) else {
+                sendError(String(error))
                 return
             }
-            let newData = results!.subdataWithRange(NSMakeRange(5, results!.length - 5)) /* subset response data! */
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
             
-            print(newData)
+            guard let resultsDictionary = results as? [String:AnyObject] else {
+                sendError("results could not be casted as dictionary in createSessionID")
+                return
+            }
+            
+            guard let sessionDictionary = resultsDictionary[UdacityClient.JSONResponseKeys.Session] as? [String:AnyObject] else {
+                sendError("can't cast sessionDictionary as dictionary")
+                return
+            }
+            
+            guard let sessionID = sessionDictionary[UdacityClient.JSONResponseKeys.SessionID] as? String else {
+                sendError("no sessionID found in sessionDictionary")
+                return
+            }
+            
+            completionHandlerForSession(success: true, sessionID: sessionID, errorString: nil)
             
         }
     }

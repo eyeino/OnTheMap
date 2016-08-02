@@ -89,24 +89,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jgg-FG-wF5">
-                                <rect key="frame" x="213" y="186" width="175" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jgg-FG-wF5">
+                                <rect key="frame" x="257" y="70" width="88" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="2ne-zf-J0C" id="z9x-jY-gAp"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="plN-6n-sFd">
-                                <rect key="frame" x="213" y="246" width="175" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="2ne-zf-J0C" id="fRS-TA-Ejz"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBk-dm-gsG">
-                                <rect key="frame" x="235" y="295" width="131" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iBk-dm-gsG">
+                                <rect key="frame" x="235" y="170" width="131" height="30"/>
                                 <state key="normal" title="Log in with Udacity"/>
                                 <connections>
                                     <action selector="loginButtonUdacity:" destination="2ne-zf-J0C" eventType="touchUpInside" id="PLb-ee-MeV"/>
@@ -116,8 +108,24 @@
                                 <rect key="frame" x="228" y="508" width="145" height="30"/>
                                 <state key="normal" title="Log in with Facebook"/>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="plN-6n-sFd">
+                                <rect key="frame" x="214" y="122" width="175" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2ne-zf-J0C" id="fRS-TA-Ejz"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="iBk-dm-gsG" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="71c-A8-6XN"/>
+                            <constraint firstItem="plN-6n-sFd" firstAttribute="top" secondItem="Jgg-FG-wF5" secondAttribute="bottom" constant="20" id="KCc-qg-4N8"/>
+                            <constraint firstItem="Jgg-FG-wF5" firstAttribute="top" secondItem="9My-Mu-qkB" secondAttribute="bottom" constant="50" id="cRN-z1-0Ji"/>
+                            <constraint firstItem="plN-6n-sFd" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="jSZ-bs-pSN"/>
+                            <constraint firstItem="iBk-dm-gsG" firstAttribute="top" secondItem="plN-6n-sFd" secondAttribute="bottom" constant="20" id="mCr-2k-lkj"/>
+                            <constraint firstItem="Jgg-FG-wF5" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="unt-fV-oFd"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="password" destination="plN-6n-sFd" id="zJ0-dG-kAx"/>
