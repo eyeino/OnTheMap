@@ -5,7 +5,7 @@
 //  Created by Ian MacFarlane on 8/1/16.
 //  Copyright © 2016 Ian MacFarlane. All rights reserved.
 //
-/*
+
 import Foundation
 import UIKit
 
@@ -32,14 +32,13 @@ class ParseClient: NSObject {
     
     // MARK: GET
     
-    func taskForGETMethod(method: String, parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForGETMethod(method: String, parameters: [String:AnyObject] = [String:AnyObject](), completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
         /* 1. Set the parameters */
-        var parametersWithApiKey = parameters
-        parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL, Configure the request */
-        let request = NSMutableURLRequest(URL: ParseURLFromParameters(parametersWithApiKey, withPathExtension: method))
+        let request = NSMutableURLRequest(URL: ParseURLFromParameters(parameters, withPathExtension: method))
+        addParseHTTPHeaders(request)
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -81,14 +80,17 @@ class ParseClient: NSObject {
     private func ParseURLFromParameters(parameters: [String:AnyObject], withPathExtension: String? = nil) -> NSURL {
         
         let components = NSURLComponents()
-        components.scheme = UdacityClient.Constants.ApiScheme
-        components.host = UdacityClient.Constants.ApiHost
-        components.path = UdacityClient.Constants.ApiPath + (withPathExtension ?? "")
-        components.queryItems = [NSURLQueryItem]()
+        components.scheme = ParseClient.Constants.ApiScheme
+        components.host = ParseClient.Constants.ApiHost
+        components.path = ParseClient.Constants.ApiPath + (withPathExtension ?? "")
         
-        for (key, value) in parameters {
-            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
-            components.queryItems!.append(queryItem)
+        if !parameters.isEmpty {
+            components.queryItems = [NSURLQueryItem]()
+        
+            for (key, value) in parameters {
+                let queryItem = NSURLQueryItem(name: key, value: "\(value)")
+                components.queryItems!.append(queryItem)
+            }
         }
         
         return components.URL!
@@ -108,5 +110,10 @@ class ParseClient: NSObject {
         completionHandlerForConvertData(result: parsedResult, error: nil)
     }
     
+    //Adds required headers to request to receive response from Parse
+    private func addParseHTTPHeaders(request: NSMutableURLRequest) {
+        request.addValue(Constants.APIKey, forHTTPHeaderField: HTTPHeaderKeys.APIKey)
+        request.addValue(Constants.ApplicationID, forHTTPHeaderField: HTTPHeaderKeys.ApplicationID)
+    }
+    
 }
- */

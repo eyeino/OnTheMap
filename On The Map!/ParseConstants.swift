@@ -5,41 +5,35 @@
 //  Created by Ian MacFarlane on 8/1/16.
 //  Copyright © 2016 Ian MacFarlane. All rights reserved.
 //
-/*
+
 extension ParseClient {
     // MARK: Constants
     struct Constants {
         
         // MARK: API Key
-        static let ApiKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+        static let APIKey: String = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
         static let ApplicationID: String = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
         
         // MARK: URLs
         static let ApiScheme = "https"
-        static let ApiHost = "api.themoviedb.org"
-        static let ApiPath = "/3"
-        static let AuthorizationURL : String = "https://www.themoviedb.org/authenticate/"
+        static let ApiHost = "parse.udacity.com"
+        static let ApiPath = "/parse/classes"
+    }
+    
+    //MARK: HTTP Headers
+    struct HTTPHeaderKeys {
+        
+        static let APIKey = "X-Parse-REST-API-Key"
+        static let ApplicationID = "X-Parse-Application-Id"
+        
     }
     
     // MARK: Methods
     struct Methods {
         
         // MARK: Account
-        static let Account = "/account"
-        static let AccountIDFavoriteMovies = "/account/{id}/favorite/movies"
-        static let AccountIDFavorite = "/account/{id}/favorite"
-        static let AccountIDWatchlistMovies = "/account/{id}/watchlist/movies"
-        static let AccountIDWatchlist = "/account/{id}/watchlist"
+        static let StudentLocation = "/StudentLocation"
         
-        // MARK: Authentication
-        static let AuthenticationTokenNew = "/authentication/token/new"
-        static let AuthenticationSessionNew = "/authentication/session/new"
-        
-        // MARK: Search
-        static let SearchMovie = "/search/movie"
-        
-        // MARK: Config
-        static let Config = "/configuration"
         
     }
     
@@ -81,4 +75,3 @@ extension ParseClient {
         
     }
 }
- */
