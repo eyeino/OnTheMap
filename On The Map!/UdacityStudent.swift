@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+extension UdacityClient {
+
+    class UdacityStudent {
+    
+    }
+
+}

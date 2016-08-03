@@ -11,9 +11,9 @@ import UIKit
 
 extension UdacityClient {
     
-    func authenticateWithViewController(hostViewController: UIViewController, completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
+    func authenticateWithViewController(username: String, password: String, hostViewController: UIViewController, completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
 
-        createSessionID() { (success, sessionID, errorString) in
+        createSessionID(username, password: password) { (success, sessionID, errorString) in
             if success {
                 self.sessionID = sessionID
                 completionHandlerForAuth(success: success, errorString: errorString)
@@ -24,11 +24,9 @@ extension UdacityClient {
     
     }
     
-    private func createSessionID(completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
+    private func createSessionID(username: String, password: String, completionHandlerForSession: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
         
-        //let jsonBody = "{\"\(UdacityClient.JSONBodyKeys.Udacity)\": {\"\(UdacityClient.JSONBodyKeys.Username)\": \"\(username)\", \"\(UdacityClient.JSONBodyKeys.Password)\": \"\(password)\"}}"
-
-        let jsonBody: String! = "{\"udacity\": {\"username\": \"***REMOVED***\", \"password\": \"***REMOVED***\"}}"
+        let jsonBody = "{\"\(UdacityClient.JSONBodyKeys.Udacity)\": {\"\(UdacityClient.JSONBodyKeys.Username)\": \"\(username)\", \"\(UdacityClient.JSONBodyKeys.Password)\": \"\(password)\"}}"
             
         taskForPOSTMethod(Methods.Session, jsonBody: jsonBody) { (results, error) in
             

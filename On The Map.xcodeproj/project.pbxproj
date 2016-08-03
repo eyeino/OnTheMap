@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C446EDB1D51578200E4A717 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C446EDA1D51578200E4A717 /* StudentInformation.swift */; };
 		3C940C581D503FDD003A8547 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C940C571D503FDD003A8547 /* MapKit.framework */; };
 		3C9CED161D4F9EB700BF2CE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9CED151D4F9EB700BF2CE2 /* AppDelegate.swift */; };
 		3C9CED181D4F9EB700BF2CE2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9CED171D4F9EB700BF2CE2 /* MapViewController.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C446EDA1D51578200E4A717 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		3C940C571D503FDD003A8547 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3C9CED121D4F9EB700BF2CE2 /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C9CED151D4F9EB700BF2CE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				3C9CED611D4FCCB100BF2CE2 /* ParseClient.swift */,
 				3C9CED631D4FCCBD00BF2CE2 /* ParseConstants.swift */,
+				3C446EDA1D51578200E4A717 /* StudentInformation.swift */,
 			);
 			name = Parse;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C446EDB1D51578200E4A717 /* StudentInformation.swift in Sources */,
 				3C9CED621D4FCCB100BF2CE2 /* ParseClient.swift in Sources */,
 				3C9CED481D4FA86700BF2CE2 /* LoginViewController.swift in Sources */,
 				3C9CED601D4FCBE100BF2CE2 /* UdacityConstants.swift in Sources */,

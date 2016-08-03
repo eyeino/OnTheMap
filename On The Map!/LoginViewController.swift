@@ -17,7 +17,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
-        UdacityClient.sharedInstance().authenticateWithViewController(self) { (success, errorString) in
+        UdacityClient.sharedInstance().authenticateWithViewController(username.text!, password: password.text!, hostViewController: self) { (success, errorString) in
             performUIUpdatesOnMain {
                 if success {
                     self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
