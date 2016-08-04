@@ -14,6 +14,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var loginButtonUdacity: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,6 +104,10 @@ extension LoginViewController {
         backgroundGradient.frame = view.frame
         view.layer.insertSublayer(backgroundGradient, atIndex: 0)
         
+        // config login button color
+        loginButtonUdacity.backgroundColor = UI.BlueColor
+        
+        //UITextField settings
         username.placeholder = "Username"
         password.placeholder = "Password"
         configureTextField(username)
