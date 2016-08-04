@@ -21,6 +21,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         configureUI()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        password.text = ""
+    }
+    
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {

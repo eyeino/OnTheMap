@@ -10,6 +10,23 @@ import UIKit
 
 class TableViewController: UITableViewController {
 
+    @IBAction func logoutButton(sender: AnyObject) {
+        UdacityClient.sharedInstance().logoutWithUdacity(self) { (success, error) in
+            if success {
+                performUIUpdatesOnMain {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        //set stored user details back to nil upon logout
+                        let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
+                        delegate?.udacityUserID = nil
+                        delegate?.udacitySessionID = nil
+                    })
+                }
+            } else {
+                print("Logout failure: \(error)")
+            }
+        }
+    }
+    
     var students: [StudentInformation] {
         get {
             let delegate = UIApplication.sharedApplication().delegate as? AppDelegate

@@ -28,7 +28,19 @@ extension UdacityClient {
                 completionHandlerForAuth(success: success, errorString: errorString)
             }
         }
+    }
     
+    func logoutWithUdacity(hostViewController: UIViewController, completionHandlerForLogout: (success: Bool, error: String?) -> Void) {
+        
+        deleteSession { (success, result, error) in
+            if success {
+                print("Logout successful for Session ID: \(result!)")
+            } else {
+                print("There was an error logging out: \(error)")
+            }
+        }
+        
+        completionHandlerForLogout(success: true, error: nil)
     }
     
     private func createSessionID(username: String, password: String, completionHandlerForSession: (success: Bool, sessionID: String?, userID: String?, errorString: String?) -> Void) {
@@ -82,4 +94,23 @@ extension UdacityClient {
             }
         }
     }
+    
+    private func deleteSession(completionHandlerForDeleteSession: (success: Bool, result: String?, error: String?) -> Void) {
+        let method: String = Methods.Session
+        
+        taskForDELETEMethod(method) { (result, error) in
+            if let error = error {
+                completionHandlerForDeleteSession(success: false, result: nil, error: String(error))
+            } else {
+                if let deletedSession = result[JSONResponseKeys.Session] as? [String:AnyObject] {
+                    let deletedSessionID = deletedSession[JSONResponseKeys.SessionID] as? String
+                    completionHandlerForDeleteSession(success: true, result: deletedSessionID, error: nil)
+                } else {
+                    completionHandlerForDeleteSession(success: false, result: nil, error: "No session was deleted.")
+                }
+            }
+        }
+    }
+    
+    
 }
