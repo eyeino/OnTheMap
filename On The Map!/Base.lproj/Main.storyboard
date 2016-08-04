@@ -150,10 +150,10 @@
             </objects>
             <point key="canvasLocation" x="675" y="-513"/>
         </scene>
-        <!--Item-->
+        <!--Table-->
         <scene sceneID="UDE-Kb-Mmb">
             <objects>
-                <navigationController id="hVN-fb-fDU" sceneMemberID="viewController">
+                <navigationController id="hVN-fb-fDU" userLabel="Table" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="nN2-7d-ET7"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Gm-UM-EC5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

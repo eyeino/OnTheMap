@@ -92,10 +92,9 @@ class UdacityClient: NSObject {
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
-            func sendError(error: String) {
-                print(error)
+            func sendError(error: String, code: Int = 1) {
                 let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerForPOST(result: nil, error: NSError(domain: "taskForPOSTMethod", code: 1, userInfo: userInfo))
+                completionHandlerForPOST(result: nil, error: NSError(domain: "taskForPOSTMethod", code: code, userInfo: userInfo))
             }
             
             /* GUARD: Was there an error? */
@@ -110,9 +109,9 @@ class UdacityClient: NSObject {
                 let statusCode = (response as? NSHTTPURLResponse)?.statusCode
                 
                 if statusCode == 403 {
-                    sendError("Incorrect username/password.")
+                    sendError("Incorrect username/password.", code: 301)
                 } else {
-                    sendError("Your request returned a status code other than 2xx!")
+                    sendError("Your request returned a status code other than 2xx!", code: 302)
                 }
                 
                 return

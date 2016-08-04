@@ -30,7 +30,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
-        UdacityClient.sharedInstance().authenticateWithUdacity(username.text!, password: password.text!, hostViewController: self) { (success, errorString) in
+        UdacityClient.sharedInstance().authenticateWithUdacity(username.text!, password: password.text!, hostViewController: self) { (success, error) in
                 if success {
                     ParseClient.sharedInstance().loadStudentInformation() { (success, error) in
                         if success {
@@ -38,19 +38,27 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
                             }
                         } else {
-                            print("Failed to load student data from Parse server: \(error)")
-                            //self.showAlertWithErrorMessageString("Failed to load student data from Parse server.")
+                            performUIUpdatesOnMain({ 
+                                self.showLoginAlertWithError(error)
+                            })
                         }
                     }
                         
                 } else {
-                    print("Failed to authenticate with Udacity: \(errorString)")
+                    if let error = error {
+                        performUIUpdatesOnMain({
+                            self.showLoginAlertWithError(error)
+                        })
+                        
+                    }
+                        
+                    }
                     //self.showAlertWithErrorMessageString(errorString!)
                 }
         }
     }
     
-}
+
 
 extension LoginViewController {
     
@@ -63,6 +71,28 @@ extension LoginViewController {
 }
 
 extension LoginViewController {
+    
+    private func showLoginAlertWithError(error: NSError?) {
+        var alertMessage: String!
+        if let error = error {
+            switch error.code {
+            case 301:
+                alertMessage = "Incorrect username and/or password."
+            case 302:
+                alertMessage = "Unable connect to Udacity servers."
+            case 1:
+                alertMessage = "Error origin: \(error.domain), Details: \(error.userInfo[NSLocalizedDescriptionKey]!)"
+            default:
+                alertMessage = "Generic error: Origin not specified."
+            }
+        }
+        
+        let alert = UIAlertController(title: "Error!", message: alertMessage, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(okAction)
+    
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
     
     private func configureUI() {
         

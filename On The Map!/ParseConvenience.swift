@@ -11,12 +11,19 @@ import UIKit
 
 extension ParseClient {
     
-    func loadStudentInformation(completionHandlerForLoadStudentInformation: (success: Bool, error: String?) -> Void) {
+    func loadStudentInformation(completionHandlerForLoadStudentInformation: (success: Bool, error: NSError?) -> Void) {
         let mutableMethod: String = Methods.StudentLocation
         
         taskForGETMethod(mutableMethod) { (result, error) in
+            
+            func sendError(error: String, code: Int = 1) {
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForLoadStudentInformation(success: false, error: NSError(domain: "loadStudentInformation", code: code, userInfo: userInfo))
+            }
+            
+            //pass deeper error on if error occurred elsewhere
             if let error = error {
-                completionHandlerForLoadStudentInformation(success: false, error: "Error occurred in GET method: \(error).")
+                completionHandlerForLoadStudentInformation(success: false, error: error)
             } else {
                 //cast parsed JSON response as Swift dictionary
                 if let result = result[ParseClient.JSONResponseKeys.Students] as? [[String:AnyObject]] {
@@ -29,12 +36,11 @@ extension ParseClient {
                     
                     completionHandlerForLoadStudentInformation(success: true, error: nil)
                 } else {
-                    completionHandlerForLoadStudentInformation(success: false, error: "Students not found in response, or can't otherwise cast response to dictionary.")
+                    sendError("Couldn't cast JSON as dictionary.")
                 }
             }
         }
     }
-    
     func postStudentInformation(completionHandlerForPostStudentInformation: (success: Bool, error: String?) -> Void) {
         let method = Methods.StudentLocation
         let jsonBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}"
