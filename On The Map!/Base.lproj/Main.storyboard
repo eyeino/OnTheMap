@@ -179,12 +179,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQk-kI-cBF">
-                                <rect key="frame" x="0.0" y="0.0" width="145" height="30"/>
-                                <state key="normal" title="Log in with Facebook"/>
-                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="90s-Ic-5a7">
-                                <rect key="frame" x="40" y="88" width="520" height="110"/>
+                                <rect key="frame" x="40" y="118" width="520" height="110"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jgg-FG-wF5">
                                         <rect key="frame" x="0.0" y="0.0" width="520" height="30"/>
@@ -225,9 +221,23 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="Jgg-FG-wF5" firstAttribute="top" secondItem="90s-Ic-5a7" secondAttribute="top" constant="20" id="40i-tD-cen"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="110" id="QR9-hf-E87"/>
+                                    <constraint firstAttribute="height" constant="110" id="qcU-ep-lfS"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="40i-tD-cen"/>
+                                    </mask>
+                                </variation>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="On The Map" textAlignment="center" lineBreakMode="tailTruncation" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="4TT-Lt-Tc1">
                                 <rect key="frame" x="40" y="248" width="520" height="104"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="104" id="7Lw-2U-rhc"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="104" id="RcK-4Z-dln"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="65"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -235,15 +245,23 @@
                         </subviews>
                         <color key="backgroundColor" red="0.14649420348372111" green="0.58181043732913085" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="4TT-Lt-Tc1" firstAttribute="top" relation="greaterThanOrEqual" secondItem="90s-Ic-5a7" secondAttribute="bottom" priority="750" constant="40" id="0dP-8z-FjF"/>
                             <constraint firstItem="4TT-Lt-Tc1" firstAttribute="top" secondItem="90s-Ic-5a7" secondAttribute="bottom" constant="50" id="J5g-d4-bHR"/>
-                            <constraint firstItem="90s-Ic-5a7" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="MyQ-4N-WXx"/>
                             <constraint firstItem="90s-Ic-5a7" firstAttribute="leading" secondItem="f0Z-4O-JNS" secondAttribute="leadingMargin" constant="20" id="N0k-Fk-lhP"/>
                             <constraint firstItem="90s-Ic-5a7" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="NbM-GK-Qoc"/>
-                            <constraint firstItem="4TT-Lt-Tc1" firstAttribute="centerY" secondItem="f0Z-4O-JNS" secondAttribute="centerY" id="Sre-Ez-EBu"/>
+                            <constraint firstItem="4TT-Lt-Tc1" firstAttribute="centerY" secondItem="f0Z-4O-JNS" secondAttribute="centerY" priority="750" id="UbY-r7-abq"/>
+                            <constraint firstItem="90s-Ic-5a7" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9My-Mu-qkB" secondAttribute="bottom" constant="20" id="X5K-KZ-TL3"/>
                             <constraint firstItem="4TT-Lt-Tc1" firstAttribute="centerX" secondItem="f0Z-4O-JNS" secondAttribute="centerX" id="bPK-V6-IN3"/>
                             <constraint firstItem="4TT-Lt-Tc1" firstAttribute="top" secondItem="90s-Ic-5a7" secondAttribute="bottom" constant="50" id="m5N-KE-hjW"/>
+                            <constraint firstItem="4TT-Lt-Tc1" firstAttribute="top" secondItem="90s-Ic-5a7" secondAttribute="bottom" constant="20" id="pe4-7o-5wa"/>
                             <constraint firstItem="4TT-Lt-Tc1" firstAttribute="leading" secondItem="f0Z-4O-JNS" secondAttribute="leadingMargin" constant="20" id="xM6-1T-4Dq"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="J5g-d4-bHR"/>
+                                <exclude reference="m5N-KE-hjW"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="password" destination="plN-6n-sFd" id="zJ0-dG-kAx"/>
@@ -282,6 +300,6 @@
         <image name="UdacityLogo" width="80" height="80"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2Ux-PE-tWP"/>
+        <segue reference="Psj-R6-WTS"/>
     </inferredMetricsTieBreakers>
 </document>
