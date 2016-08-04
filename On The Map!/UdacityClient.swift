@@ -21,7 +21,7 @@ class UdacityClient: NSObject {
     
     //authentication state
     var sessionID: String? = nil
-    //var userID: String? = nil
+    var userID: String? = nil
     
     // MARK: Initializers
     
@@ -53,7 +53,7 @@ class UdacityClient: NSObject {
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
+                sendError("Your request returned a status code other than 2xx! The returned status code was \((response as? NSHTTPURLResponse)?.statusCode)")
                 return
             }
             

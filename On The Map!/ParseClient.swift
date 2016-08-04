@@ -16,14 +16,6 @@ class ParseClient: NSObject {
     // shared session
     var session = NSURLSession.sharedSession()
     
-    //configuration object
-    //none
-    
-    //authentication state
-    //var requestToken: String? = nil
-    var sessionID: String? = nil
-    //var userID: String? = nil
-    
     // MARK: Initializers
     
     override init() {
@@ -114,6 +106,15 @@ class ParseClient: NSObject {
     private func addParseHTTPHeaders(request: NSMutableURLRequest) {
         request.addValue(Constants.APIKey, forHTTPHeaderField: HTTPHeaderKeys.APIKey)
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: HTTPHeaderKeys.ApplicationID)
+    }
+    
+    // MARK: Shared Instance
+    
+    class func sharedInstance() -> ParseClient {
+        struct Singleton {
+            static var sharedInstance = ParseClient()
+        }
+        return Singleton.sharedInstance
     }
     
 }

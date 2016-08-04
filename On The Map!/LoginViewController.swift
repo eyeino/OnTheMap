@@ -24,14 +24,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
-        UdacityClient.sharedInstance().authenticateWithViewController( username.text!, password: password.text!, hostViewController: self) { (success, errorString) in
-            performUIUpdatesOnMain {
+        UdacityClient.sharedInstance().authenticateWithUdacity(username.text!, password: password.text!, hostViewController: self) { (success, errorString) in
                 if success {
-                    self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
+                    ParseClient.sharedInstance().loadStudentInformation() { (success, error) in
+                        if success {
+                            performUIUpdatesOnMain {
+                                self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
+                            }
+                        } else {
+                            print("Failed to load student data from Parse server: \(error)")
+                            //self.showAlertWithErrorMessageString("Failed to load student data from Parse server.")
+                        }
+                    }
+                        
                 } else {
-                    print(errorString)
+                    print("Failed to authenticate with Udacity: \(errorString)")
+                    //self.showAlertWithErrorMessageString(errorString!)
                 }
-            }
         }
     }
     
@@ -45,35 +54,6 @@ extension LoginViewController {
         textField.resignFirstResponder()
         return true
     }
-    
-    /*
-    //Clears textfields when editing begins
-    func textFieldDidBeginEditing(textField: UITextField) {
-        let text = textField.text
-        if text == "Username" || text == "Password" {
-            textField.text = ""
-        }
-    }
-    
-    enum TextFieldTags: Int {
-        case Username = 0
-        case Password = 1
-    }
-    
-    //If textfield is empty when editing ends, insert "TOP" or "BOTTOM"
-    func textFieldDidEndEditing(textField: UITextField) {
-        let text = textField.text!
-        let tag = textField.tag
-        switch (text, tag) {
-        case ("", TextFieldTags.Username.rawValue):
-            textField.text = "Username"
-        case ("", TextFieldTags.Password.rawValue):
-            textField.text = "Password"
-        default:
-            break
-        }
-    }
-    */
 }
 
 extension LoginViewController {

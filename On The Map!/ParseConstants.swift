@@ -34,7 +34,6 @@ extension ParseClient {
         // MARK: Account
         static let StudentLocation = "/StudentLocation"
         
-        
     }
     
     // MARK: URL Keys
@@ -44,22 +43,18 @@ extension ParseClient {
     
     // MARK: Parameter Keys
     struct ParameterKeys {
-        static let ApiKey = "api_key"
-        static let SessionID = "session_id"
-        static let RequestToken = "request_token"
-        static let Query = "query"
+        static let Limit = "limit"
+        static let Order = "order"
     }
     
-    // MARK: JSON Body Keys
-    struct JSONBodyKeys {
-        static let MediaType = "media_type"
-        static let MediaID = "media_id"
-        static let Favorite = "favorite"
-        static let Watchlist = "watchlist"
+    struct ParameterValues {
+        static let OrderByNewestFirst = "-updatedAt"
     }
     
     // MARK: JSON Response Keys
     struct JSONResponseKeys {
+        //MARK: Initial conversion to dict
+        static let Students = "results"
         
         //MARK: Students
         static let StudentCreatedAt = "createdAt"
