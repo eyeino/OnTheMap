@@ -30,8 +30,6 @@ extension ParseClient {
                         delegate.students.append(StudentInformation.init(infoDictionaryForStudent: student))
                     }
                     
-                    print(delegate.students)
-                    
                     completionHandlerForLoadStudentInformation(success: true, error: nil)
                 } else {
                     completionHandlerForLoadStudentInformation(success: false, error: "Students not found in response, or can't otherwise cast response to dictionary.")
