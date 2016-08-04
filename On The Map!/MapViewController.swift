@@ -26,50 +26,43 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var createLocationButton: UIBarButtonItem!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // The "locations" array is an array of dictionary objects that are similar to the JSON
-        // data that you can download from parse.
+        // Get list of students from AppDelegate
         var students: [StudentInformation] {
             get {
                 let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
                 if let students = delegate?.students {
                     return students
                 } else {
+                    print("Students array not found in AppDelegate.")
                     return [StudentInformation]()
                 }
             }
         }
         
-        // We will create an MKPointAnnotation for each dictionary in "locations". The
-        // point annotations will be stored in this array, and then provided to the map view.
+        //Convert list of students to map annotations
         var annotations = [MKPointAnnotation]()
         
-        // The "locations" array is loaded with the sample data below. We are using the dictionaries
-        // to create map annotations. This would be more stylish if the dictionaries were being
-        // used to create custom structs. Perhaps StudentLocation structs.
         
         for student in students {
             
-            // Notice that the float values are being used to create CLLocationDegree values.
-            // This is a version of the Double type.
+            //Convert double to degrees
             let lat = CLLocationDegrees(student.latitude!)
             let long = CLLocationDegrees(student.longitude!)
             
-            // The lat and long are used to create a CLLocationCoordinates2D instance.
+            //Create instance in 2D space
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            
-            let first = student.firstName!
-            let last = student.lastName!
-            let mediaURL = student.mediaURL!
             
             // Here we create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = "\(first) \(last)"
-            annotation.subtitle = mediaURL
+            annotation.title = "\(student.firstName!) \(student.lastName!)"
+            annotation.subtitle = student.mediaURL
             
             // Finally we place the annotation in an array of annotations.
             annotations.append(annotation)
@@ -78,6 +71,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // When the array is complete, we add the annotations to the map.
         self.mapView.addAnnotations(annotations)
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     // MARK: - MKMapViewDelegate
@@ -114,67 +111,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 app.openURL(NSURL(string: toOpen)!)
             }
         }
-    }
-    //    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-    //
-    //        if control == annotationView.rightCalloutAccessoryView {
-    //            let app = UIApplication.sharedApplication()
-    //            app.openURL(NSURL(string: annotationView.annotation.subtitle))
-    //        }
-    //    }
-    
-    // MARK: - Sample Data
-    
-    // Some sample data. This is a dictionary that is more or less similar to the
-    // JSON data that you will download from Parse.
-    
-    func hardCodedLocationData() -> [[String : AnyObject]] {
-        return  [
-            [
-                "createdAt" : "2015-02-24T22:27:14.456Z",
-                "firstName" : "Jessica",
-                "lastName" : "Uelmen",
-                "latitude" : 28.1461248,
-                "longitude" : -82.75676799999999,
-                "mapString" : "Tarpon Springs, FL",
-                "mediaURL" : "www.linkedin.com/in/jessicauelmen/en",
-                "objectId" : "kj18GEaWD8",
-                "uniqueKey" : 872458750,
-                "updatedAt" : "2015-03-09T22:07:09.593Z"
-            ], [
-                "createdAt" : "2015-02-24T22:35:30.639Z",
-                "firstName" : "Gabrielle",
-                "lastName" : "Miller-Messner",
-                "latitude" : 35.1740471,
-                "longitude" : -79.3922539,
-                "mapString" : "Southern Pines, NC",
-                "mediaURL" : "http://www.linkedin.com/pub/gabrielle-miller-messner/11/557/60/en",
-                "objectId" : "8ZEuHF5uX8",
-                "uniqueKey" : 2256298598,
-                "updatedAt" : "2015-03-11T03:23:49.582Z"
-            ], [
-                "createdAt" : "2015-02-24T22:30:54.442Z",
-                "firstName" : "Jason",
-                "lastName" : "Schatz",
-                "latitude" : 37.7617,
-                "longitude" : -122.4216,
-                "mapString" : "18th and Valencia, San Francisco, CA",
-                "mediaURL" : "http://en.wikipedia.org/wiki/Swift_%28programming_language%29",
-                "objectId" : "hiz0vOTmrL",
-                "uniqueKey" : 2362758535,
-                "updatedAt" : "2015-03-10T17:20:31.828Z"
-            ], [
-                "createdAt" : "2015-03-11T02:48:18.321Z",
-                "firstName" : "Jarrod",
-                "lastName" : "Parkes",
-                "latitude" : 34.73037,
-                "longitude" : -86.58611000000001,
-                "mapString" : "Huntsville, Alabama",
-                "mediaURL" : "https://linkedin.com/in/jarrodparkes",
-                "objectId" : "CDHfAy8sdp",
-                "uniqueKey" : 996618664,
-                "updatedAt" : "2015-03-13T03:37:58.389Z"
-            ]
-        ]
     }
 }

@@ -11,10 +11,7 @@ import UIKit
 
 extension ParseClient {
     
-    
-    
     func loadStudentInformation(completionHandlerForLoadStudentInformation: (success: Bool, error: String?) -> Void) {
-        
         let mutableMethod: String = Methods.StudentLocation
         
         taskForGETMethod(mutableMethod) { (result, error) in
@@ -35,6 +32,15 @@ extension ParseClient {
                     completionHandlerForLoadStudentInformation(success: false, error: "Students not found in response, or can't otherwise cast response to dictionary.")
                 }
             }
+        }
+    }
+    
+    func postStudentInformation(completionHandlerForPostStudentInformation: (success: Bool, error: String?) -> Void) {
+        let method = Methods.StudentLocation
+        let jsonBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}"
+        
+        taskForPOSTMethod(method, jsonBody: jsonBody) { (result, error) in
+            
         }
     }
     

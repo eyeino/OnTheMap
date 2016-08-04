@@ -21,6 +21,8 @@ class TableViewController: UITableViewController {
         }
     }
     
+    @IBOutlet weak var createLocationButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,12 +44,42 @@ class TableViewController: UITableViewController {
         
         // Set the name and image
         cell.textLabel?.text = "\(student.firstName!) \(student.lastName!)"
-        cell.detailTextLabel?.text = student.mapString!
+        cell.detailTextLabel?.text = student.mediaURL!
 
         
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let url = students[indexPath.row].mediaURL
+        let app = UIApplication.sharedApplication()
+        
+        if self.verifyUrl(url) {
+            app.openURL(NSURL(string: url!)!)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "User did not supply a valid URL.", preferredStyle: .Alert)
+            let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+            
+            alert.addAction(okAction)
+            
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    //checks if URL is indeed a valid URL
+    func verifyUrl (urlString: String?) -> Bool {
+        //Check for nil
+        if let urlString = urlString {
+            // create NSURL instance
+            if let url = NSURL(string: urlString) {
+                // check if your application can open the NSURL instance
+                return UIApplication.sharedApplication().canOpenURL(url)
+            }
+        }
+        return false
+    }
     /*
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
