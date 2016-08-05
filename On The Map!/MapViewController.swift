@@ -25,8 +25,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
+    var userIDInParseResults: Bool = false
+    
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var createLocationButton: UIBarButtonItem!
     
     @IBAction func logoutButton(sender: AnyObject) {
         UdacityClient.sharedInstance().logoutWithUdacity(self) { (success, error) in
@@ -46,10 +47,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    @IBAction func postLocationButton(sender: AnyObject) {
+        if userIDInParseResults {
+            print("Your username was found in the Parse response. You need to use PUT to update it. Also this needs an alert.")
+        } else {
+            print("No username matching yours was found in the Parse response. POST is needed.")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Get list of students from AppDelegate
         var students: [StudentInformation] {
             get {
@@ -63,9 +71,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
+        var udacityUserID: String? {
+            get {
+                if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                    return delegate.udacityUserID
+                } else {
+                    return ""
+                }
+            }
+        }
+        
         //Convert list of students to map annotations
         var annotations = [MKPointAnnotation]()
-        
         
         for student in students {
             
@@ -84,6 +101,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             // Finally we place the annotation in an array of annotations.
             annotations.append(annotation)
+            
+            //check if client userID is found in Parse results
+            if let myUniqueKey = udacityUserID, let studentUniqueKey = student.uniqueKey {
+                if myUniqueKey == studentUniqueKey {
+                    userIDInParseResults = true
+                }
+            }
         }
         
         // When the array is complete, we add the annotations to the map.
@@ -96,10 +120,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - MKMapViewDelegate
-    
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
+
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
@@ -120,8 +141,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
+    // This delegate method is implemented to respond to taps
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()

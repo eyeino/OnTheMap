@@ -45,16 +45,19 @@ extension ParseClient {
     struct ParameterKeys {
         static let Limit = "limit"
         static let Order = "order"
+        static let Where = "where"
     }
     
     struct ParameterValues {
         static let OrderByNewestFirst = "-updatedAt"
+        static let WhereUniqueKey = "{\"uniqueKey\":\"{id}\"}"
     }
     
     // MARK: JSON Response Keys
     struct JSONResponseKeys {
         //MARK: Initial conversion to dict
         static let Students = "results"
+        static let Student  = "results"
         
         //MARK: Students
         static let StudentCreatedAt = "createdAt"
@@ -68,5 +71,16 @@ extension ParseClient {
         static let StudentMapString = "mapString"
         static let StudentUpdatedAt = "updatedAt"
         
+    }
+    
+    struct JSONBodyKeys {
+        //MARK: Students
+        static let StudentFirstName = "firstName"
+        static let StudentLastName = "lastName"
+        static let StudentLatitude = "latitude"
+        static let StudentLongitude = "longitude"
+        static let StudentUniqueKey = "uniqueKey"
+        static let StudentMediaURL = "mediaURL"
+        static let StudentMapString = "mapString"
     }
 }

@@ -33,7 +33,7 @@ struct StudentInformation {
             updatedAt = dateFormatter.dateFromString(updatedAtString)
         }
         
-        //id numbers: objectId is unique to every user, uniqueKey is the Udacity account id
+        //id numbers: objectId is unique to every SI object, uniqueKey is the Udacity account id
         objectId  = info[ParseClient.JSONResponseKeys.StudentObjectID]  as? String
         uniqueKey = info[ParseClient.JSONResponseKeys.StudentUniqueKey] as? String
         

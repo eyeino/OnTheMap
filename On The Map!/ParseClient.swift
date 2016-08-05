@@ -78,10 +78,9 @@ class ParseClient: NSObject {
         /* 2/3. Build the URL, Configure the request */
         let request = NSMutableURLRequest(URL: ParseURLFromParameters(parameters, withPathExtension: method))
         request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         addParseAuthHTTPHeaders(request)
-        request.HTTPBody = jsonBody.dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = jsonBody.dataUsingEncoding(NSUTF8StringEncoding)!
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -106,7 +105,7 @@ class ParseClient: NSObject {
                 if statusCode == 403 {
                     sendError("Incorrect username/password.")
                 } else {
-                    sendError("Your request returned a status code other than 2xx!")
+                    sendError("Your request returned a status code other than 2xx! Hmm...")
                 }
                 
                 return
@@ -118,11 +117,8 @@ class ParseClient: NSObject {
                 return
             }
             
-            //Remove first 5 characters; they are used internally by Udacity for security reasons
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            
             /* 5/6. Parse the data and use the data (happens in completion handler) */
-            self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForPOST)
+            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
         }
         
         /* 7. Start the request */
@@ -168,6 +164,15 @@ class ParseClient: NSObject {
     private func addParseAuthHTTPHeaders(request: NSMutableURLRequest) {
         request.addValue(Constants.APIKey, forHTTPHeaderField: HTTPHeaderKeys.APIKey)
         request.addValue(Constants.ApplicationID, forHTTPHeaderField: HTTPHeaderKeys.ApplicationID)
+    }
+    
+    // substitute the key for the value that is contained within the method name
+    func substituteKeyInMethod(method: String, key: String, value: String) -> String? {
+        if method.rangeOfString("{\(key)}") != nil {
+            return method.stringByReplacingOccurrencesOfString("{\(key)}", withString: value)
+        } else {
+            return nil
+        }
     }
     
     // MARK: Shared Instance
