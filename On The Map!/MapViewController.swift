@@ -38,6 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
                         delegate?.udacityUserID = nil
                         delegate?.udacitySessionID = nil
+                        delegate?.userIDInParseResults = false
                         
                     })
                 }
@@ -105,6 +106,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //check if client userID is found in Parse results
             if let myUniqueKey = udacityUserID, let studentUniqueKey = student.uniqueKey {
                 if myUniqueKey == studentUniqueKey {
+                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    delegate.userIDInParseResults = true
                     userIDInParseResults = true
                 }
             }

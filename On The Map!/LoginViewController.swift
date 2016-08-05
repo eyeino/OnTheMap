@@ -16,6 +16,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButtonUdacity: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         statusLabel.text = ""
         password.text = ""
+        
+        if activityIndicator.isAnimating() {
+            activityIndicator.stopAnimating()
+        }
+        
     }
     
     var session: NSURLSession!
@@ -35,6 +42,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginButtonUdacity(sender: AnyObject) {
         
         setUIEnabled(false)
+        activityIndicator.startAnimating()
         statusLabel.text = "Logging into Udacity..."
         
         //Try to log into Udacity
@@ -55,6 +63,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         
                         } else { //Error with Parse
                             performUIUpdatesOnMain({ 
+                                self.activityIndicator.stopAnimating()
                                 self.setUIEnabled(true)
                                 self.statusLabel.text = ""
                                 self.showLoginAlertWithError(error)
@@ -65,6 +74,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 } else { //Error with logging into Udacity
                     if let error = error {
                         performUIUpdatesOnMain({
+                            self.activityIndicator.stopAnimating()
                             self.setUIEnabled(true)
                             self.statusLabel.text = ""
                             self.showLoginAlertWithError(error)

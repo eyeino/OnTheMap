@@ -63,7 +63,7 @@ extension ParseClient {
                     completionHandlerForPostStudentInformation(success: true, error: nil)
                     
                 } else {
-                    sendError("Couldn't cast JSON response as string.")
+                    sendError("Post unsuccessful: No valid confirmation of successful post found.")
                 }
             }
             
