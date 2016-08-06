@@ -11,7 +11,6 @@ import UIKit
 import CoreLocation
 
 class PostLocationViewController: UIViewController, UITextFieldDelegate {
-    var method = "POST"
     
     @IBOutlet weak var mapStringTextField: UITextField!
     @IBOutlet weak var mediaURLTextField:  UITextField!
@@ -37,7 +36,7 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         setUIEnabled(true)
     }
     
-    @IBAction func submitButton(sender: AnyObject) {
+    @IBAction func submitButton(sender: UIStoryboardSegue) {
         
         setUIEnabled(false)
         if userIDInParseData { //this should be changed to !userIDInParse data when PUT method is implemented
@@ -82,7 +81,7 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
                                     print("Success! Posted student data.)")
                                     self.activityIndicator.stopAnimating()
                                     self.setUIEnabled(true)
-                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    self.performSegueWithIdentifier("studentInformationSubmitted", sender: self)
                                 })
                             //if post fails
                             } else {

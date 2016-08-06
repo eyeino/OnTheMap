@@ -42,8 +42,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="Pin" id="XGC-n5-nYx">
                             <connections>
-                                <action selector="postLocationButton:" destination="SBt-Ob-o0R" id="Bnf-JQ-ARn"/>
-                                <segue destination="Wed-SU-HiF" kind="presentation" id="xqU-3f-jGG"/>
+                                <segue destination="Wed-SU-HiF" kind="presentation" id="bju-4i-WIv"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -67,7 +66,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post Your Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhF-bq-CuL">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Post Your Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhF-bq-CuL">
                                 <rect key="frame" x="170" y="20" width="260" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="tnO-es-EdS"/>
@@ -75,7 +74,7 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-ZX-U4h">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-ZX-U4h">
                                 <rect key="frame" x="40" y="80" width="520" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="NYv-Rq-J44"/>
@@ -86,7 +85,7 @@
                                     <outlet property="delegate" destination="Wed-SU-HiF" id="m9L-ta-CR1"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Website URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="StB-iO-gN2">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your Website URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="StB-iO-gN2">
                                 <rect key="frame" x="40" y="140" width="520" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Ps4-ep-qA2"/>
@@ -97,21 +96,21 @@
                                     <outlet property="delegate" destination="Wed-SU-HiF" id="sFd-Mv-7lj"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Vo-gg-NaG">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Vo-gg-NaG">
                                 <rect key="frame" x="276" y="200" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
-                                    <action selector="submitButton:" destination="Wed-SU-HiF" eventType="touchUpInside" id="z3w-T6-pyT"/>
+                                    <action selector="submitButton:" destination="Wed-SU-HiF" eventType="touchUpInside" id="nab-Qp-SrS"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09l-v5-JhV">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09l-v5-JhV">
                                 <rect key="frame" x="276" y="250" width="48" height="30"/>
                                 <state key="normal" title="Cancel"/>
                                 <connections>
-                                    <action selector="dismissButton:" destination="Wed-SU-HiF" eventType="touchUpInside" id="IB0-hE-bnI"/>
+                                    <segue destination="1AN-m9-lBp" kind="unwind" identifier="studentInformationSubmitted" unwindAction="unwindToMapController:" id="3UJ-wV-rRo"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="elC-hk-QrL">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="elC-hk-QrL">
                                 <rect key="frame" x="335" y="205" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
@@ -137,6 +136,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="JBI-K0-DDs"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="elC-hk-QrL" id="uP5-Ko-V22"/>
@@ -147,8 +147,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrH-uZ-AAv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="1AN-m9-lBp" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2277" y="67"/>
+            <point key="canvasLocation" x="2407" y="0.0"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="EMO-2D-ZxO">
@@ -200,7 +201,11 @@
                                 <action selector="logoutButton:" destination="XrS-pj-jRi" id="DeW-zA-oli"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="Pin" id="Yze-3L-ifM"/>
+                        <barButtonItem key="rightBarButtonItem" image="Pin" id="Yze-3L-ifM">
+                            <connections>
+                                <segue destination="Wed-SU-HiF" kind="presentation" id="FTf-Qx-bcG"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2pb-Rl-TaF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -398,4 +403,7 @@
         <image name="Map" width="32" height="32"/>
         <image name="Pin" width="32" height="32"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="FTf-Qx-bcG"/>
+    </inferredMetricsTieBreakers>
 </document>
