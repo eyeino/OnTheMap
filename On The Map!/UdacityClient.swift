@@ -64,7 +64,6 @@ class UdacityClient: NSObject {
             }
             
             let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             self.convertDataWithCompletionHandler(newData, completionHandlerForConvertData: completionHandlerForGET)

@@ -15,6 +15,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButtonUdacity: UIButton!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,37 +28,62 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        statusLabel.text = ""
         password.text = ""
+        
+        if activityIndicator.isAnimating() {
+            activityIndicator.stopAnimating()
+        }
+        
     }
     
     var session: NSURLSession!
     
     @IBAction func loginButtonUdacity(sender: AnyObject) {
+        
+        setUIEnabled(false)
+        activityIndicator.startAnimating()
+        statusLabel.text = "Logging into Udacity..."
+        
+        //Try to log into Udacity
         UdacityClient.sharedInstance().authenticateWithUdacity(username.text!, password: password.text!, hostViewController: self) { (success, error) in
-                if success {
+            
+                if success { //Logged into Udacity successfully
+                    performUIUpdatesOnMain({ 
+                        self.statusLabel.text = "Processing Parse data..."
+                    })
+                    
+                    //Try to download and process Parse data
                     ParseClient.sharedInstance().loadStudentInformation() { (success, error) in
-                        if success {
+                        if success { //Loaded Parse data into StudentInformation structs successfully
                             performUIUpdatesOnMain {
+                                self.setUIEnabled(true)
                                 self.performSegueWithIdentifier("SegueToTabBar", sender: sender)
                             }
-                        } else {
+                        
+                        } else { //Error with Parse
                             performUIUpdatesOnMain({ 
+                                self.activityIndicator.stopAnimating()
+                                self.setUIEnabled(true)
+                                self.statusLabel.text = ""
                                 self.showLoginAlertWithError(error)
                             })
                         }
                     }
-                        
-                } else {
+                
+                } else { //Error with logging into Udacity
                     if let error = error {
                         performUIUpdatesOnMain({
+                            self.activityIndicator.stopAnimating()
+                            self.setUIEnabled(true)
+                            self.statusLabel.text = ""
                             self.showLoginAlertWithError(error)
                         })
                         
                     }
                         
-                    }
-                    //self.showAlertWithErrorMessageString(errorString!)
                 }
+            }
         }
     }
     
@@ -93,6 +121,17 @@ extension LoginViewController {
         alert.addAction(okAction)
     
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    private func setUIEnabled(enabled: Bool) {
+        loginButtonUdacity.enabled = enabled
+        
+        // adjust login button alpha
+        if enabled {
+            loginButtonUdacity.alpha = 1.0
+        } else {
+            loginButtonUdacity.alpha = 0.5
+        }
     }
     
     private func configureUI() {

@@ -19,6 +19,7 @@ class TableViewController: UITableViewController {
                         let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
                         delegate?.udacityUserID = nil
                         delegate?.udacitySessionID = nil
+                        delegate?.userIDInParseResults = false
                     })
                 }
             } else {

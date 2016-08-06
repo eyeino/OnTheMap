@@ -54,6 +54,9 @@ extension UdacityClient {
         
         static let User = "user"
         
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
+        
         //MARK: User Info
         
         

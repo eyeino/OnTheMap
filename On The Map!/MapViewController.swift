@@ -9,24 +9,14 @@
 import UIKit
 import MapKit
 
-/**
- * This view controller demonstrates the objects involved in displaying pins on a map.
- *
- * The map is a MKMapView.
- * The pins are represented by MKPointAnnotation instances.
- *
- * The view controller conforms to the MKMapViewDelegate so that it can receive a method
- * invocation when a pin annotation is tapped. It accomplishes this using two delegate
- * methods: one to put a small "info" button on the right side of each pin, and one to
- * respond when the "info" button is tapped.
- */
-
 class MapViewController: UIViewController, MKMapViewDelegate {
     
-    // The map. See the setup in the Storyboard file. Note particularly that the view controller
-    // is set up as the map view's delegate.
+    var userIDInParseResults: Bool = false
+    var myStudentDictionary: [String:AnyObject]?
+    var myStudentInformation: StudentInformation? = nil
+    var annotations = [MKPointAnnotation]()
+    
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var createLocationButton: UIBarButtonItem!
     
     @IBAction func logoutButton(sender: AnyObject) {
         UdacityClient.sharedInstance().logoutWithUdacity(self) { (success, error) in
@@ -37,6 +27,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
                         delegate?.udacityUserID = nil
                         delegate?.udacitySessionID = nil
+                        delegate?.userIDInParseResults = false
                         
                     })
                 }
@@ -46,10 +37,68 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    @IBAction func postLocationButton(sender: AnyObject) {
+        if userIDInParseResults {
+            print("Your username was found in the Parse response. You need to use PUT to update it. Also this needs an alert.")
+        } else {
+            print("No username matching yours was found in the Parse response. POST is needed.")
+        }
+    }
+    
+    //execute this block after
+    @IBAction func unwindToMapController(sender: UIStoryboardSegue) {
+        if (sender.identifier != nil) {
+            if sender.identifier == "studentInformationSubmitted" {
+                let postLocationViewController = sender.sourceViewController as! PostLocationViewController
+                let studentDictionary = postLocationViewController.studentDictionary
+                
+                if !studentDictionary.isEmpty {
+                    self.myStudentInformation = StudentInformation.init(infoDictionaryForStudent: studentDictionary)
+                    print("Unwind was a success!")
+                    guard let student = self.myStudentInformation else {
+                        print("Error: passed StudentInformation from unwind segue was nil.")
+                        return
+                    }
+                    
+                    //insert into studentInformation dictionary so the tableView picks it up
+                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    delegate.students.insert(student, atIndex: 0)
+                    
+                    //add annotation to existing mapview annotations
+                    //Convert double to degrees
+                    let lat = CLLocationDegrees(student.latitude!)
+                    let long = CLLocationDegrees(student.longitude!)
+                    
+                    //Create instance in 2D space
+                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    
+                    // Here we create the annotation and set its coordiate, title, and subtitle properties
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = coordinate
+                    annotation.title = "\(student.firstName!) \(student.lastName!)"
+                    annotation.subtitle = student.mediaURL
+                    
+                    // Finally we place the annotation in an array of annotations.
+                    self.mapView.addAnnotation(annotation)
+                    
+                    //zoom to the new annotation
+                    let regionRadius: CLLocationDistance = 1000
+                    let coordinateRegion = MKCoordinateRegionMakeWithDistance(annotation.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+                    mapView.setRegion(coordinateRegion, animated: true)
+                    
+                    
+                } else {
+                    print("Nothing returned. Must have pressed the cancel button.")
+                }
+                
+                
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Get list of students from AppDelegate
         var students: [StudentInformation] {
             get {
@@ -63,10 +112,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
+        var udacityUserID: String? {
+            get {
+                if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                    return delegate.udacityUserID
+                } else {
+                    return ""
+                }
+            }
+        }
+        
         //Convert list of students to map annotations
-        var annotations = [MKPointAnnotation]()
-        
-        
         for student in students {
             
             //Convert double to degrees
@@ -84,6 +140,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             // Finally we place the annotation in an array of annotations.
             annotations.append(annotation)
+            
+            //check if client userID is found in Parse results
+            if let myUniqueKey = udacityUserID, let studentUniqueKey = student.uniqueKey {
+                if myUniqueKey == studentUniqueKey {
+                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    delegate.userIDInParseResults = true
+                    userIDInParseResults = true
+                }
+            }
         }
         
         // When the array is complete, we add the annotations to the map.
@@ -93,13 +158,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if let student = myStudentInformation {
+            let lat = CLLocationDegrees(student.latitude!)
+            let long = CLLocationDegrees(student.longitude!)
+            
+            //Create instance in 2D space
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            
+            // Here we create the annotation and set its coordiate, title, and subtitle properties
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = "\(student.firstName!) \(student.lastName!)"
+            annotation.subtitle = student.mediaURL
+            
+            // Finally we place the annotation in an array of annotations.
+            self.annotations.append(annotation)
+        }
+        
     }
     
     // MARK: - MKMapViewDelegate
-    
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
+
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
@@ -120,8 +200,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
+    // This delegate method is implemented to respond to taps
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
