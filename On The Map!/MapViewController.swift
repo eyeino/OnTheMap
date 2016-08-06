@@ -52,9 +52,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let postLocationViewController = sender.sourceViewController as! PostLocationViewController
                 let studentDictionary = postLocationViewController.studentDictionary
                 
-                if !studentDictionary.isEmpty {
+                if let firstName = studentDictionary[ParseClient.JSONResponseKeys.StudentFirstName] as? String, lastName = studentDictionary[ParseClient.JSONResponseKeys.StudentLastName] as? String {
+                    
+                    print("User has first name \(firstName) and last name \(lastName))")
+                    
                     self.myStudentInformation = StudentInformation.init(infoDictionaryForStudent: studentDictionary)
                     print("Unwind was a success!")
+                    
                     guard let student = self.myStudentInformation else {
                         print("Error: passed StudentInformation from unwind segue was nil.")
                         return

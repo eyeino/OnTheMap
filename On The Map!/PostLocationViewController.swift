@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreLocation
+import MapKit
 
 class PostLocationViewController: UIViewController, UITextFieldDelegate {
     
@@ -17,6 +18,9 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var geocodeButton: UIButton!
+    
+    @IBOutlet weak var mapView: MKMapView!
     
     var userID: String? = nil
     var userIDInParseData: Bool = false
@@ -43,27 +47,10 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         setUIEnabled(false)
         if userIDInParseData { //this should be changed to !userIDInParse data when PUT method is implemented
             
+            activityIndicator.startAnimating()
             //add values to student dict from textfield input
             self.studentDictionary[ParseClient.JSONResponseKeys.StudentMediaURL] = mediaURLTextField.text!
             self.studentDictionary[ParseClient.JSONResponseKeys.StudentMapString] = mapStringTextField.text!
-            
-            let address = mapStringTextField.text!
-            let geocoder = CLGeocoder()
-        
-            activityIndicator.startAnimating()
-            geocoder.geocodeAddressString(address, completionHandler: {(placemarks, error) -> Void in
-                if(error != nil) {
-                    performUIUpdatesOnMain({
-                        self.setUIEnabled(true)
-                        self.activityIndicator.stopAnimating()
-                        self.showMapAlertWithError(error)
-                    })
-                }
-                if let placemark = placemarks?.first {
-                    let coordinates:CLLocationCoordinate2D = placemark.location!.coordinate
-                
-                    self.studentDictionary[ParseClient.JSONResponseKeys.StudentLatitude] = coordinates.latitude
-                    self.studentDictionary[ParseClient.JSONResponseKeys.StudentLongitude] = coordinates.longitude
                 
                     UdacityClient.sharedInstance().getGovernmentName(udacityUserID: self.userID!, completionHandlerForGetGovernmentName: { (success, error) in
                     
@@ -95,8 +82,6 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
                             }
                         })
                     })
-                }
-            })
         } else if !userIDInParseData { //this should be changed to userIDInParseData, see above
             //there should be a PUT method here in a future version
         }
@@ -104,6 +89,70 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func dismissButton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func geocodeButton(sender: AnyObject) {
+        
+        activityIndicator.startAnimating()
+        
+        let address = mapStringTextField.text!
+        let geocoder = CLGeocoder()
+        
+        geocoder.geocodeAddressString(address, completionHandler: { (placemarks, error) -> Void in
+            if(error != nil) {
+                
+                if let existingAnnotation = self.mapView.annotations.first {
+                    self.mapView.removeAnnotation(existingAnnotation)
+                }
+                
+                performUIUpdatesOnMain({
+                    self.setUIEnabled(true)
+                    self.activityIndicator.stopAnimating()
+                    self.showMapAlertWithError(error)
+                })
+            }
+            if let placemark = placemarks?.first {
+                
+                //remove annotation if one already exists
+                if let existingAnnotation = self.mapView.annotations.first {
+                    self.mapView.removeAnnotation(existingAnnotation)
+                }
+                
+                //get coordinates from geocoded location
+                let coordinates: CLLocationCoordinate2D = placemark.location!.coordinate
+                
+                let lat = CLLocationDegrees(coordinates.latitude)
+                let long = CLLocationDegrees(coordinates.longitude)
+                
+                self.studentDictionary[ParseClient.JSONResponseKeys.StudentLatitude] = lat
+                self.studentDictionary[ParseClient.JSONResponseKeys.StudentLongitude] = long
+                
+                //Create instance in 2D space
+                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                
+                //Create annotation object and set its coordinates
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                
+                //add single annotation to mapView
+                self.mapView.addAnnotation(annotation)
+                
+                //zoom to annotation config
+                let regionRadius: CLLocationDistance = 1000
+                let coordinateRegion = MKCoordinateRegionMakeWithDistance(annotation.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+                
+                performUIUpdatesOnMain({
+                    //reenable submit button once geolocation is successful
+                    self.submitButton.enabled = true
+                    self.submitButton.alpha = 1.0
+                    self.dismissKeyboard()
+                    //zoom to annotation
+                    self.mapView.setRegion(coordinateRegion, animated: true)
+                })
+            }
+        })
+        
+        activityIndicator.stopAnimating()
     }
     
     private func showMapAlertWithError(error: NSError?) {
@@ -125,6 +174,7 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     private func setUIEnabled(enabled: Bool) {
         submitButton.enabled = enabled
         cancelButton.enabled = enabled
+        geocodeButton.enabled = enabled
         mapStringTextField.enabled = enabled
         mediaURLTextField.enabled = enabled
         
@@ -132,11 +182,13 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         if enabled {
             submitButton.alpha = 1
             cancelButton.alpha = 1
+            geocodeButton.alpha = 1
             mapStringTextField.alpha = 1
             mediaURLTextField.alpha = 1
         } else {
             submitButton.alpha = 0.5
             cancelButton.alpha = 0.5
+            geocodeButton.alpha = 0.5
             mapStringTextField.alpha = 0.5
             mediaURLTextField.alpha = 0.5
         }
@@ -179,6 +231,15 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    //disable submit button so user can't submit a location without geolocation
+    func textFieldDidBeginEditing(textField: UITextField) {
+        
+        if textField.tag == 1 {
+            submitButton.enabled = false
+            submitButton.alpha = 0.5
+        }
+    }
+    
     struct UI {
         static let LoginColorTop = UIColor(red: 0.345, green: 0.839, blue: 0.988, alpha: 1.0).CGColor
         static let LoginColorBottom = UIColor(red: 0.023, green: 0.569, blue: 0.910, alpha: 1.0).CGColor
@@ -186,5 +247,8 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         static let BlueColor = UIColor(red: 0.0, green:0.502, blue:0.839, alpha: 1.0)
     }
     
-    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
 }

@@ -76,7 +76,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-ZX-U4h">
+                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4e2-ZX-U4h">
                                 <rect key="frame" x="20" y="130" width="512" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="NRk-bb-9es"/>
@@ -134,6 +134,9 @@
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="XWx-Kb-3bH">
                                 <rect key="frame" x="0.0" y="180" width="600" height="370"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Wed-SU-HiF" id="L77-XO-7ZE"/>
+                                </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hca-c5-I3K" userLabel="Geocode Button">
                                 <rect key="frame" x="540" y="130" width="40" height="40"/>
@@ -144,6 +147,9 @@
                                 <state key="normal" image="Pin">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="geocodeButton:" destination="Wed-SU-HiF" eventType="touchUpInside" id="dWO-Am-aDj"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -219,7 +225,9 @@
                     <connections>
                         <outlet property="activityIndicator" destination="elC-hk-QrL" id="uP5-Ko-V22"/>
                         <outlet property="cancelButton" destination="09l-v5-JhV" id="4zK-V2-X9x"/>
+                        <outlet property="geocodeButton" destination="Hca-c5-I3K" id="hmb-zG-Ut2"/>
                         <outlet property="mapStringTextField" destination="4e2-ZX-U4h" id="eLz-Wd-WIN"/>
+                        <outlet property="mapView" destination="XWx-Kb-3bH" id="xqQ-y7-taa"/>
                         <outlet property="mediaURLTextField" destination="StB-iO-gN2" id="F9k-Xu-U3U"/>
                         <outlet property="submitButton" destination="5Vo-gg-NaG" id="tFt-hA-MGG"/>
                     </connections>
