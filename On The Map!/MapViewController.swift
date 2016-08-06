@@ -52,9 +52,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let postLocationViewController = sender.sourceViewController as! PostLocationViewController
                 let studentDictionary = postLocationViewController.studentDictionary
                 
-                if !studentDictionary.isEmpty {
+                if let firstName = studentDictionary[ParseClient.JSONResponseKeys.StudentFirstName] as? String, lastName = studentDictionary[ParseClient.JSONResponseKeys.StudentLastName] as? String {
+                    
+                    print("User has first name \(firstName) and last name \(lastName))")
+                    
                     self.myStudentInformation = StudentInformation.init(infoDictionaryForStudent: studentDictionary)
                     print("Unwind was a success!")
+                    
                     guard let student = self.myStudentInformation else {
                         print("Error: passed StudentInformation from unwind segue was nil.")
                         return
@@ -199,14 +203,34 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return pinView
     }
     
-    
     // This delegate method is implemented to respond to taps
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let toOpen = view.annotation?.subtitle! {
-                app.openURL(NSURL(string: toOpen)!)
+                let toOpenWithHTTPS = "https://" + toOpen
+                
+                if verifyUrl(toOpen) {
+                    app.openURL(NSURL(string: toOpen)!)
+                } else if verifyUrl(toOpenWithHTTPS) {
+                    app.openURL(NSURL(string: toOpenWithHTTPS)!)
+                } else {
+                    print("Invalid URL.")
+                }
             }
         }
+    }
+    
+    //checks if URL is indeed a valid URL
+    func verifyUrl (urlString: String?) -> Bool {
+        //Check for nil
+        if let urlString = urlString {
+            // create NSURL instance
+            if let url = NSURL(string: urlString) {
+                // check if your application can open the NSURL instance
+                return UIApplication.sharedApplication().canOpenURL(url)
+            }
+        }
+        return false
     }
 }

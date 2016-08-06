@@ -43,6 +43,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         setUIEnabled(false)
         activityIndicator.startAnimating()
+        dismissKeyboard()
         statusLabel.text = "Logging into Udacity..."
         
         //Try to log into Udacity
@@ -96,6 +97,11 @@ extension LoginViewController {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 }
 
@@ -152,6 +158,10 @@ extension LoginViewController {
         configureTextField(username)
         configureTextField(password)
         password.secureTextEntry = true
+        
+        //dismiss keyboard on tap
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostLocationViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
 
     }
     
