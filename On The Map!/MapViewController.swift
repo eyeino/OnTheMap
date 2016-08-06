@@ -9,18 +9,6 @@
 import UIKit
 import MapKit
 
-/**
- * This view controller demonstrates the objects involved in displaying pins on a map.
- *
- * The map is a MKMapView.
- * The pins are represented by MKPointAnnotation instances.
- *
- * The view controller conforms to the MKMapViewDelegate so that it can receive a method
- * invocation when a pin annotation is tapped. It accomplishes this using two delegate
- * methods: one to put a small "info" button on the right side of each pin, and one to
- * respond when the "info" button is tapped.
- */
-
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     var userIDInParseResults: Bool = false
@@ -71,8 +59,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         print("Error: passed StudentInformation from unwind segue was nil.")
                         return
                     }
-                    //add annotation
                     
+                    //insert into studentInformation dictionary so the tableView picks it up
+                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    delegate.students.insert(student, atIndex: 0)
+                    
+                    //add annotation to existing mapview annotations
                     //Convert double to degrees
                     let lat = CLLocationDegrees(student.latitude!)
                     let long = CLLocationDegrees(student.longitude!)
@@ -88,6 +80,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     
                     // Finally we place the annotation in an array of annotations.
                     self.mapView.addAnnotation(annotation)
+                    
+                    //zoom to the new annotation
+                    let regionRadius: CLLocationDistance = 1000
+                    let coordinateRegion = MKCoordinateRegionMakeWithDistance(annotation.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+                    mapView.setRegion(coordinateRegion, animated: true)
+                    
+                    
                 } else {
                     print("Nothing returned. Must have pressed the cancel button.")
                 }
