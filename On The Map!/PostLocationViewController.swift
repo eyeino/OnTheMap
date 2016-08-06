@@ -156,10 +156,11 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showMapAlertWithError(error: NSError?) {
+        
         var alertMessage: String!
         
-        if let domain = error?.domain, userInfo = error?.userInfo {
-            alertMessage = "Error origin: \(domain), Details: \(userInfo)"
+        if let domain = error?.domain, localizedDescription = error?.localizedDescription {
+            alertMessage = "Error origin: \(domain), Details: \(localizedDescription)"
         } else {
             alertMessage = String(error)
         }
@@ -211,6 +212,10 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         
         configureTextField(mediaURLTextField)
         configureTextField(mapStringTextField)
+        
+        //dismiss keyboard on tap
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostLocationViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
     }
     

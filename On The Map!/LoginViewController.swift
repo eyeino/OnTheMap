@@ -158,6 +158,10 @@ extension LoginViewController {
         configureTextField(username)
         configureTextField(password)
         password.secureTextEntry = true
+        
+        //dismiss keyboard on tap
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostLocationViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
 
     }
     
