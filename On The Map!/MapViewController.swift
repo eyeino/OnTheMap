@@ -57,14 +57,42 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    //execute this block after
     @IBAction func unwindToMapController(sender: UIStoryboardSegue) {
         if (sender.identifier != nil) {
             if sender.identifier == "studentInformationSubmitted" {
                 let postLocationViewController = sender.sourceViewController as! PostLocationViewController
-                self.myStudentInformation = StudentInformation.init(infoDictionaryForStudent: postLocationViewController.studentDictionary)
+                let studentDictionary = postLocationViewController.studentDictionary
                 
-                print("Unwind was a success! Student Information retrieved was:")
-                print(myStudentInformation)
+                if !studentDictionary.isEmpty {
+                    self.myStudentInformation = StudentInformation.init(infoDictionaryForStudent: studentDictionary)
+                    print("Unwind was a success!")
+                    guard let student = self.myStudentInformation else {
+                        print("Error: passed StudentInformation from unwind segue was nil.")
+                        return
+                    }
+                    //add annotation
+                    
+                    //Convert double to degrees
+                    let lat = CLLocationDegrees(student.latitude!)
+                    let long = CLLocationDegrees(student.longitude!)
+                    
+                    //Create instance in 2D space
+                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    
+                    // Here we create the annotation and set its coordiate, title, and subtitle properties
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = coordinate
+                    annotation.title = "\(student.firstName!) \(student.lastName!)"
+                    annotation.subtitle = student.mediaURL
+                    
+                    // Finally we place the annotation in an array of annotations.
+                    self.mapView.addAnnotation(annotation)
+                } else {
+                    print("Nothing returned. Must have pressed the cancel button.")
+                }
+                
+                
             }
         }
     }
