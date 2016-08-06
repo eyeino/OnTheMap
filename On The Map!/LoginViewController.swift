@@ -108,9 +108,9 @@ extension LoginViewController {
             case 301:
                 alertMessage = "Incorrect username and/or password."
             case 302:
-                alertMessage = "Unable connect to Udacity servers."
+                alertMessage = "Unable to connect to Udacity servers."
             case 1:
-                alertMessage = "Error origin: \(error.domain), Details: \(error.userInfo[NSLocalizedDescriptionKey]!)"
+                alertMessage = "Error origin: \(error.domain), Details: \(error.localizedDescription)"
             default:
                 alertMessage = "Generic error: Origin not specified."
             }

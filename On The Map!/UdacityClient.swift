@@ -98,7 +98,13 @@ class UdacityClient: NSObject {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                sendError("There was an error with your request: \(error)")
+                //check for localized description
+                guard let localizedDescription = error?.localizedDescription else {
+                    sendError("There was an error with your request.")
+                    return
+                }
+                //localized description can contain specifics on the error (no internet connection, etc)
+                sendError("There was an error with your request. (\(localizedDescription))")
                 return
             }
             
