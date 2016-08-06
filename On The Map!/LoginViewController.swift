@@ -43,6 +43,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         setUIEnabled(false)
         activityIndicator.startAnimating()
+        dismissKeyboard()
         statusLabel.text = "Logging into Udacity..."
         
         //Try to log into Udacity
@@ -96,6 +97,11 @@ extension LoginViewController {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 }
 
