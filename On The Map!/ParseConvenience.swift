@@ -27,11 +27,9 @@ extension ParseClient {
             } else {
                 //cast parsed JSON response as Swift dictionary
                 if let result = result[ParseClient.JSONResponseKeys.Students] as? [[String:AnyObject]] {
-                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    
                     //initializce all students found in JSON response as StudentInformation structs in the AppDelegate
                     for student in result {
-                        delegate.students.append(StudentInformation.init(infoDictionaryForStudent: student))
+                        Students.sharedInstance.list.append(StudentInformation.init(infoDictionaryForStudent: student))
                     }
                     completionHandlerForLoadStudentInformation(success: true, error: nil)
                     
@@ -103,7 +101,6 @@ extension ParseClient {
             
             
         }
-        
         
     }
     

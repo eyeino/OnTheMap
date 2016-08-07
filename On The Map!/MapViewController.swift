@@ -65,8 +65,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     }
                     
                     //insert into studentInformation dictionary so the tableView picks it up
-                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    delegate.students.insert(student, atIndex: 0)
+                    Students.sharedInstance.list.insert(student, atIndex: 0)
                     
                     //add annotation to existing mapview annotations
                     //Convert double to degrees
@@ -106,14 +105,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Get list of students from AppDelegate
         var students: [StudentInformation] {
             get {
-                let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
-                if let students = delegate?.students {
-                    return students
-                } else {
-                    print("Students array not found in AppDelegate.")
-                    return [StudentInformation]()
+                return Students.sharedInstance.list
                 }
-            }
         }
         
         var udacityUserID: String? {

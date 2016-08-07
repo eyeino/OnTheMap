@@ -30,13 +30,8 @@ class TableViewController: UITableViewController {
     
     var students: [StudentInformation] {
         get {
-            let delegate = UIApplication.sharedApplication().delegate as? AppDelegate
-            if let students = delegate?.students {
-                return students
-            } else {
-                return [StudentInformation]()
+            return Students.sharedInstance.list
             }
-        }
     }
     
     @IBOutlet weak var createLocationButton: UIBarButtonItem!
