@@ -28,12 +28,6 @@ class TableViewController: UITableViewController {
         }
     }
     
-    var students: [StudentInformation] {
-        get {
-            return Students.sharedInstance.list
-            }
-    }
-    
     @IBOutlet weak var createLocationButton: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -47,13 +41,13 @@ class TableViewController: UITableViewController {
     let reuseIdentifier = "StudentTableCell"
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return students.count
+        return Students.sharedInstance.list.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier)!
-        let student = students[indexPath.row]
+        let student = Students.sharedInstance.list[indexPath.row]
         
         // Set the name and image
         cell.textLabel?.text = "\(student.firstName!) \(student.lastName!)"
@@ -65,7 +59,7 @@ class TableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        let url = students[indexPath.row].mediaURL
+        let url = Students.sharedInstance.list[indexPath.row].mediaURL
         let app = UIApplication.sharedApplication()
         
         if self.verifyUrl(url) {

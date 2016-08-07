@@ -101,13 +101,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Get list of students from AppDelegate
-        var students: [StudentInformation] {
-            get {
-                return Students.sharedInstance.list
-                }
-        }
         
         var udacityUserID: String? {
             get {
@@ -120,7 +113,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         //Convert list of students to map annotations
-        for student in students {
+        for student in Students.sharedInstance.list {
             
             //Convert double to degrees
             let lat = CLLocationDegrees(student.latitude!)
