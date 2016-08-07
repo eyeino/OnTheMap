@@ -40,6 +40,9 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         setUIEnabled(true)
+        submitButton.enabled = false
+        submitButton.alpha = 0.8
+        submitButton.backgroundColor = UI.GreyColor
     }
     
     @IBAction func submitButton(sender: UIStoryboardSegue) {
@@ -48,47 +51,59 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         if userIDInParseData { //this should be changed to !userIDInParse data when PUT method is implemented
             
             activityIndicator.startAnimating()
-            //add values to student dict from textfield input
+            //start adding values to student dict
             self.studentDictionary[ParseClient.JSONResponseKeys.StudentMediaURL] = mediaURLTextField.text!
             self.studentDictionary[ParseClient.JSONResponseKeys.StudentMapString] = mapStringTextField.text!
                 
                     UdacityClient.sharedInstance().getGovernmentName(udacityUserID: self.userID!, completionHandlerForGetGovernmentName: { (success, error) in
-                    
-                        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                        self.studentDictionary[ParseClient.JSONResponseKeys.StudentFirstName] = delegate.firstName
-                        self.studentDictionary[ParseClient.JSONResponseKeys.StudentLastName] = delegate.lastName
-                        self.studentDictionary[ParseClient.JSONResponseKeys.StudentUniqueKey] = self.userID
                         
-                        //initialize studentinformation object from dictionary
-                        let student = StudentInformation.init(infoDictionaryForStudent: self.studentDictionary)
+                        if let error = error { //if error occurred with getting name from Udacity
+                            performUIUpdatesOnMain({ 
+                                self.setUIEnabled(true)
+                                self.activityIndicator.stopAnimating()
+                                self.showMapAlertWithError(error)
+                            })
+                            
+                        } else { //if no error occurred with getting name from Udacity
+                            //add values retrieved from Udacity servers (first and last name)
+                            let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                            self.studentDictionary[ParseClient.JSONResponseKeys.StudentFirstName] = delegate.firstName
+                            self.studentDictionary[ParseClient.JSONResponseKeys.StudentLastName] = delegate.lastName
+                            self.studentDictionary[ParseClient.JSONResponseKeys.StudentUniqueKey] = self.userID
+                            
+                            //now the dictionary contains all required values; now it's time to initialize a studentinformation object from this dictionary
+                            let student = StudentInformation.init(infoDictionaryForStudent: self.studentDictionary)
+                            
+                            //try to post student information to server
+                            ParseClient.sharedInstance().postStudentInformation(student, completionHandlerForPostStudentInformation: { (success, error) in
+                                //if location post is successful
+                                if success {
+                                    performUIUpdatesOnMain({
+                                        print("Success! Posted student data.)")
+                                        self.activityIndicator.stopAnimating()
+                                        self.setUIEnabled(true)
+                                        self.performSegueWithIdentifier("studentInformationSubmitted", sender: self)
+                                    })
+                                //if location post fails
+                                } else {
+                                    performUIUpdatesOnMain({
+                                        self.setUIEnabled(true)
+                                        self.activityIndicator.stopAnimating()
+                                        self.showMapAlertWithError(error)
+                                    })
+                                }
+                            })
+                        }
                         
-                        //try to post student information to server
-                        ParseClient.sharedInstance().postStudentInformation(student, completionHandlerForPostStudentInformation: { (success, error) in
-                            //if post is successful
-                            if success {
-                                performUIUpdatesOnMain({
-                                    print("Success! Posted student data.)")
-                                    self.activityIndicator.stopAnimating()
-                                    self.setUIEnabled(true)
-                                    self.performSegueWithIdentifier("studentInformationSubmitted", sender: self)
-                                })
-                            //if post fails
-                            } else {
-                                performUIUpdatesOnMain({
-                                    self.setUIEnabled(true)
-                                    self.activityIndicator.stopAnimating()
-                                    self.showMapAlertWithError(error)
-                                })
-                            }
-                        })
+                        
                     })
-        } else if !userIDInParseData { //this should be changed to userIDInParseData, see above
+        } else if !userIDInParseData { //this should be changed to userIDInParseData when PUT is implemented, see above
             //there should be a PUT method here in a future version
+            performUIUpdatesOnMain({ 
+                self.setUIEnabled(true)
+                self.activityIndicator.stopAnimating()
+            })
         }
-    }
-    
-    @IBAction func dismissButton(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func geocodeButton(sender: AnyObject) {
@@ -109,6 +124,9 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
                     self.setUIEnabled(true)
                     self.activityIndicator.stopAnimating()
                     self.showMapAlertWithError(error)
+                    self.submitButton.enabled = true
+                    self.submitButton.alpha = 1.0
+                    self.submitButton.backgroundColor = UI.BlueColor
                 })
             }
             if let placemark = placemarks?.first {
@@ -145,6 +163,7 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
                     //reenable submit button once geolocation is successful
                     self.submitButton.enabled = true
                     self.submitButton.alpha = 1.0
+                    self.submitButton.backgroundColor = UI.BlueColor
                     self.dismissKeyboard()
                     //zoom to annotation
                     self.mapView.setRegion(coordinateRegion, animated: true)
@@ -213,7 +232,7 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
         configureTextField(mediaURLTextField)
         configureTextField(mapStringTextField)
         
-        //dismiss keyboard on tap
+        //dismiss keyboard on tap outside of textview
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PostLocationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
@@ -238,10 +257,26 @@ class PostLocationViewController: UIViewController, UITextFieldDelegate {
     
     //disable submit button so user can't submit a location without geolocation
     func textFieldDidBeginEditing(textField: UITextField) {
-        
+        //if edit begins
         if textField.tag == 1 {
             submitButton.enabled = false
-            submitButton.alpha = 0.5
+            submitButton.alpha = 0.8
+            submitButton.backgroundColor = UI.GreyColor
+        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        guard let urlText = mediaURLTextField.text, let mapText = mapStringTextField.text else {
+            submitButton.enabled = false
+            submitButton.alpha = 0.8
+            submitButton.backgroundColor = UI.GreyColor
+            return
+        }
+        
+        if (urlText.isEmpty && mapText.isEmpty) || urlText.isEmpty {
+            submitButton.enabled = false
+            submitButton.alpha = 0.8
+            submitButton.backgroundColor = UI.GreyColor
         }
     }
     
