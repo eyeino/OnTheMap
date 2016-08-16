@@ -50,8 +50,10 @@ class TableViewController: UITableViewController {
         let student = Students.sharedInstance.list[indexPath.row]
         
         // Set the name and image
-        cell.textLabel?.text = "\(student.firstName!) \(student.lastName!)"
-        cell.detailTextLabel?.text = student.mediaURL!
+        if let firstName = student.firstName, let lastName = student.lastName, let mediaURL = student.mediaURL {
+            cell.textLabel?.text = "\(firstName) \(lastName)"
+            cell.detailTextLabel?.text = mediaURL
+        }
 
         
         return cell

@@ -115,28 +115,30 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //Convert list of students to map annotations
         for student in Students.sharedInstance.list {
             
-            //Convert double to degrees
-            let lat = CLLocationDegrees(student.latitude!)
-            let long = CLLocationDegrees(student.longitude!)
+            if let latitude = student.latitude, let longitude = student.longitude {
+                //Convert double to degrees
+                let lat = CLLocationDegrees(latitude)
+                let long = CLLocationDegrees(longitude)
             
-            //Create instance in 2D space
-            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                //Create instance in 2D space
+                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
-            // Here we create the annotation and set its coordiate, title, and subtitle properties
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = "\(student.firstName!) \(student.lastName!)"
-            annotation.subtitle = student.mediaURL
+                // Here we create the annotation and set its coordiate, title, and subtitle properties
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = "\(student.firstName!) \(student.lastName!)"
+                annotation.subtitle = student.mediaURL
             
-            // Finally we place the annotation in an array of annotations.
-            annotations.append(annotation)
+                // Finally we place the annotation in an array of annotations.
+                annotations.append(annotation)
             
-            //check if client userID is found in Parse results
-            if let myUniqueKey = udacityUserID, let studentUniqueKey = student.uniqueKey {
-                if myUniqueKey == studentUniqueKey {
-                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    delegate.userIDInParseResults = true
-                    userIDInParseResults = true
+                //check if client userID is found in Parse results
+                if let myUniqueKey = udacityUserID, let studentUniqueKey = student.uniqueKey {
+                    if myUniqueKey == studentUniqueKey {
+                        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                        delegate.userIDInParseResults = true
+                        userIDInParseResults = true
+                    }
                 }
             }
         }
